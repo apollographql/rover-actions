@@ -1,0 +1,56 @@
+name: Run Rover Subgraph Check
+description: Run the `rover subgraph check` command
+author: Apollo GraphQL
+branding:
+  icon: terminal
+
+inputs:
+  # required
+  apollo-key:
+    description: Your Apollo Studio API key
+    required: true
+  graph-ref:
+    description: <NAME>@<VARIANT> of graph in Apollo Studio
+    required: true
+  name:
+    description: The name of the subgraph
+    required: true
+  schema:
+    description: The schema file to check
+    required: true
+
+  # optional
+  background:
+    description: (Optional) Set to `true` if the check should be run asynchronously and exit without waiting for the check results
+  query-count-threshold:
+    description: (Optional) The minimum number of times a query or mutation must have been executed in order to be considered in the check operation
+  query-percentage-threshold:
+    description: (Optional) The minimum percentage of times a query or mutation must have been executed in the time window, relative to the request count, for it to be considered in the check (0 <= x <= 100)
+  validation-period:
+    description: (Optional) Size of the time window with which to validate schema against (i.e. "24h" or "1w 2d 5h")
+
+  # common
+  log:
+    description: Specify Rover's log level
+  format:
+    description: Specify Rover's log format type [plain|json]
+  client-timeout:
+    description: Configure the timeout length (in seconds) when performing HTTP(S) requests
+
+runs:
+  using: composite
+  steps:
+    - env:
+        APOLLO_KEY: ${{ inputs.apollo-key }}
+      run: |
+        ARGS=(${{ inputs.graph-ref }} --name ${{ inputs.name }} --schema ${{ inputs.schema }} --skip-update-check)
+        [ "${{ inputs.background }}" == "true" ] && ARGS+=(--background)
+        [ -n "${{ inputs.query-count-threshold }}" ] && ARGS+=(--query-count-threshold ${{ inputs.query-count-threshold }})
+        [ -n "${{ inputs.query-percentage-threshold }}" ] && ARGS+=(--query-percentage-threshold ${{ inputs.query-percentage-threshold }})
+        [ -n "${{ inputs.validation-period }}" ] && ARGS+=(--validation-period ${{ inputs.validation-period }})
+        [ -n "${{ inputs.log }}" ] && ARGS+=(--log ${{ inputs.log }})
+        [ -n "${{ inputs.format }}" ] && ARGS+=(--format ${{ inputs.format }})
+        [ -n "${{ inputs.client-timeout }}" ] && ARGS+=(--client-timeout ${{ inputs.client-timeout }})
+
+        rover subgraph check ${ARGS[@]}
+      shell: bash
