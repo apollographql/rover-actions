@@ -1,0 +1,60 @@
+name: Test rover actions
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  install:
+    name: Install Rover CLI
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install latest
+        uses: ./install-rover-cli
+      - name: Verify latest
+        run: |
+          echo "Rover latest: $(rover --version)"
+      - name: Install specific version
+        uses: ./install-rover-cli
+        with:
+          version: ${{ vars.ROVER_TEST_VERSION }}
+      - name: Verify specific version
+        run: |
+          echo "Rover@${{ vars.ROVER_TEST_VERSION}}: $(rover --version)"
+          [ "$(rover --version | cut -d ' ' -f 2)" != "${{ vars.ROVER_TEST_VERSION }}" ] && exit 1 || echo "Version matches"
+        shell: bash
+  schema-check:
+    name: Run Rover command
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install rover
+        uses: ./install-rover-cli
+        with:
+          version: ${{ vars.ROVER_TEST_VERSION }}
+      - name: Generate test schema file
+        run: |
+          echo -e "type Query {\n  hello: String!\n}" > ./schema.graphql
+        shell: bash
+      - name: Run schema check
+        uses: ./subgraph-check
+        with:
+          apollo-key: ${{ secrets.APOLLO_KEY }}
+          graph-ref: ${{ vars.APOLLO_GRAPH_REF }}
+          name: test-rover-actions
+          schema: ./schema.graphql
