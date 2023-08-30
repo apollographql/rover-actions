@@ -1,0 +1,37 @@
+name: Create release
+on:
+  push:
+    tags:
+      - 'v[0-9]+\.[0-9]+\.[0-9]+'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get version parts
+        id: version
+        run: |
+          tag=${{ github.ref_name }}
+          version=${tag:1}
+          major=$(echo "$version" | cut -d '.' -f 1)
+          minor=$(echo "$version" | cut -d '.' -f 2)
+          patch=$(echo "$version" | cut -d '.' -f 3)
+
+          echo "release=$tag" | tee -a $GITHUB_OUTPUT
+          echo "version=$version" | tee -a $GITHUB_OUTPUT
+          echo "major=$major" | tee -a $GITHUB_OUTPUT
+          echo "minor=$minor" | tee -a $GITHUB_OUTPUT
+          echo "patch=$patch" | tee -a $GITHUB_OUTPUT
+      - name: Tag major and minor versions
+        run: |
+          git tag -d v${{ steps.version.outputs.major }} v${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }} || true
+          git push origin :v${{ steps.version.outputs.major }} :v${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }} || true
+
+          git tag v${{ steps.version.outputs.major }}
+          git tag v${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}
+          git push origin v${{ steps.version.outputs.major }} v${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ steps.version.outputs.release }} --title ${{ steps.version.outputs.release }} --notes "<Notes go here>"
