@@ -20,8 +20,7 @@ inputs:
     required: true
   routing-url:
     description: Url of the running subgraph where a supergraph can route operations (Optional after first publish)
-    required: true
-    default: ''
+    required: false
 
   # optional
   allow-invalid-routing-url:
@@ -41,7 +40,8 @@ runs:
     - env:
         APOLLO_KEY: ${{ inputs.apollo-key }}
       run: |
-        ARGS=(${{ inputs.graph-ref }} --name ${{ inputs.name }} --schema ${{ inputs.schema }} --routing-url ${{ inputs.routing-url }} --skip-update-check)
+        ARGS=(${{ inputs.graph-ref }} --name ${{ inputs.name }} --schema ${{ inputs.schema }} --skip-update-check)
+        [ -n "${{ inputs.routing-url }}" ] && ARGS+=(--routing-url ${{ inputs.routing-url }})
         [ "${{ inputs.allow-invalid-routing-url }}" == "true" ] && ARGS+=(--allow-invalid-routing-url)
         [ -n "${{ inputs.log }}" ] && ARGS+=(--log ${{ inputs.log }})
         [ -n "${{ inputs.format }}" ] && ARGS+=(--format ${{ inputs.format }})
