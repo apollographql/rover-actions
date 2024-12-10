@@ -1,0 +1,7 @@
+name: rover-actions
+description: A GitHub Action to install the Apollo Rover CLI on GitHub action
+  runners. Once installed, rover is added to PATH, so it can be used in
+  subsequent steps.
+tags:
+  - GitHub Actions
+  - Rover
