@@ -1,8 +1,13 @@
-# Run this job by drafting a new release in GitHub anc create a new tag
-# with the full semver version vMAJOR.MINOR.PATCH
+# Run this job by creating a new release in GitHub and create a new tag
+# with the new full semver version vMAJOR.MINOR.PATCH
 #
 # This job will then parse out the MAJOR and MINOR version and update
 # those lightweight git tags for those only referencing those in their actions.
+#
+# e.g. I created the new release v1.2.3 manually in GH releases
+# -> It will identify this is a new release for v1 and v1.2
+# -> If those tags exist, delete them first
+# -> Create new tags v1 and v1.2 that point at v1.2.3
 
 name: Create release
 on:
@@ -40,7 +45,3 @@ jobs:
           git tag v${{ steps.version.outputs.major }}
           git tag v${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}
           git push origin v${{ steps.version.outputs.major }} v${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}
-      - name: Create release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create ${{ steps.version.outputs.release }} --title ${{ steps.version.outputs.release }} --notes "<Notes go here>"
