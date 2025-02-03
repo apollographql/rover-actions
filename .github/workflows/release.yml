@@ -30,18 +30,15 @@ jobs:
           echo "minor=$minor" | tee -a $GITHUB_OUTPUT
           echo "patch=$patch" | tee -a $GITHUB_OUTPUT
       - name: Delete existing lightweight tags (vMAJOR) (vMAJOR.MINOR)
-        if: always()
         run: |
           git tag -d v${{ steps.version.outputs.major }} v${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }} || true
           git push origin :v${{ steps.version.outputs.major }} :v${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }} || true
       - name: Tag updated major and minor lightweight versions
-        if: always()
         run: |
           git tag v${{ steps.version.outputs.major }}
           git tag v${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}
           git push origin v${{ steps.version.outputs.major }} v${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}
       - name: Create release
-        if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release create ${{ steps.version.outputs.release }} --title ${{ steps.version.outputs.release }} --notes "<Notes go here>"
