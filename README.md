@@ -1,6 +1,6 @@
 # rover-actions
 
-**The code in this repository is experimental and has been provided for reference purposes only. Community feedback is welcome but this project may not be supported in the same way that repositories in the official [Apollo GraphQL GitHub organization](https://github.com/apollographql) are. If you need help you can file an issue on this repository, [contact Apollo](https://www.apollographql.com/contact-sales) to talk to an expert, or create a ticket directly in Apollo Studio.**
+This repository contains a set of GitHub Actions to use [Rover](https://rover.apollo.dev) in your GitHub Actions workflows.  
 
 ## [install-rover-cli](./install-rover-cli/action.yml)
 
@@ -17,7 +17,7 @@ This is a GitHub Action to install the [Apollo Rover CLI](https://rover.apollo.d
 Installing a specific version of `rover`:
 
 ```yaml
-- uses: apollosolutions/rover-actions/install-rover-cli@v1
+- uses: apollographql/rover-actions/install-rover-cli@v1
   with:
     version: 0.26.3
 ```
@@ -25,13 +25,13 @@ Installing a specific version of `rover`:
 Install the latest version:
 
 ```yaml
-- uses: apollosolutions/rover-actions/install-rover-cli@v1
+- uses: apollographql/rover-actions/install-rover-cli@v1
 ```
 
 Run a manual rover command after install:
 
 ```yaml
-- uses: apollosolutions/rover-actions/install-rover-cli@v1
+- uses: apollographql/rover-actions/install-rover-cli@v1
 - name: Run manual schema check (instead of included commands)
   env:
     APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
@@ -63,8 +63,8 @@ This is a GitHub Action to perform the [`rover subgraph check`](https://www.apol
 _**Note**: You must first install the Rover CLI_
 
 ```yaml
-- uses: apollosolutions/rover-actions/install-rover-cli@v1
-- uses: apollosolutions/rover-actions/subgraph-check@v1
+- uses: apollographql/rover-actions/install-rover-cli@v1
+- uses: apollographql/rover-actions/subgraph-check@v1
   with:
     apollo-key: ${{ secrets.APOLLO_KEY }}
     graph-ref: ${{ vars.APOLLO_GRAPH_REF }}
@@ -94,8 +94,8 @@ This is a GitHub Action to perform the [`rover subgraph lint`](https://www.apoll
 _**Note**: You must first install the Rover CLI_
 
 ```yaml
-- uses: apollosolutions/rover-actions/install-rover-cli@v1
-- uses: apollosolutions/rover-actions/subgraph-lint@v1
+- uses: apollographql/rover-actions/install-rover-cli@v1
+- uses: apollographql/rover-actions/subgraph-lint@v1
   with:
     apollo-key: ${{ secrets.APOLLO_KEY }}
     graph-ref: ${{ vars.APOLLO_GRAPH_REF }}
@@ -126,8 +126,8 @@ This is a GitHub Action to perform the [`rover subgraph publish`](https://www.ap
 _**Note**: You must first install the Rover CLI_
 
 ```yaml
-- uses: apollosolutions/rover-actions/install-rover-cli@v1
-- uses: apollosolutions/rover-actions/subgraph-publish@v1
+- uses: apollographql/rover-actions/install-rover-cli@v1
+- uses: apollographql/rover-actions/subgraph-publish@v1
   with:
     apollo-key: ${{ secrets.APOLLO_KEY }}
     graph-ref: ${{ vars.APOLLO_GRAPH_REF }}
