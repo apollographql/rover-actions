@@ -1,5 +1,17 @@
 # rover-actions
 
+> [!IMPORTANT]
+> **This repository is no longer maintained.** The Rover GitHub Actions have moved to the [`apollographql-gh-actions`](https://github.com/apollographql-gh-actions) organization and are published on the GitHub Marketplace. Please migrate to the official actions:
+>
+> | Action in this repo | Replacement |
+> | --- | --- |
+> | `apollographql/rover-actions/install-rover-cli` | [`apollographql-gh-actions/install-rover`](https://github.com/apollographql-gh-actions/install-rover) |
+> | `apollographql/rover-actions/subgraph-check` | [`apollographql-gh-actions/rover-subgraph-check`](https://github.com/apollographql-gh-actions/rover-subgraph-check) |
+> | `apollographql/rover-actions/subgraph-lint` | [`apollographql-gh-actions/rover-subgraph-lint`](https://github.com/apollographql-gh-actions/rover-subgraph-lint) |
+> | `apollographql/rover-actions/subgraph-publish` | [`apollographql-gh-actions/rover-subgraph-publish`](https://github.com/apollographql-gh-actions/rover-subgraph-publish) |
+>
+> The content below is preserved for reference only.
+
 This repository contains a set of GitHub Actions to use [Rover](https://rover.apollo.dev) in your GitHub Actions workflows.  
 
 ## [install-rover-cli](./install-rover-cli/action.yml)
